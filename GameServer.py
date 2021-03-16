@@ -9,7 +9,7 @@ app.config['SECRET_KEY'] = 'secret!'
 socketio = SocketIO(app, cors_allowed_origins="*")
 CORS(app)
 
-gameManager = NineXOGameManager(5)
+gameManager = NineXOGameManager(300)
 
 @socketio.on('connect')
 def connect():
@@ -25,7 +25,7 @@ def createGame(object):
 @socketio.on('join')
 def joinGame(object):
     #need a try/catch here 
-    [gid] = object.values()
+    gid = object['gid']
     role = gameManager.addPlayer(gid, request.sid)
     join_room(gid)
 
@@ -50,29 +50,13 @@ def message(object):
 
 @socketio.on('click')
 def click(object):
-    [gid,i,j] = object.values()
+    gid = object['gid']
 
     gameMeta = gameManager.get_game(gid)
-    gameState = gameMeta.getState()
 
-    if gameMeta.checkPlayer(request.sid):
-        if gameState.checkIfMoveValid(i,j):
-            
-            gameState.makeMove(i,j)
-
-            (boards, wonBoards, lastPlayed, _) = gameState.stateSummary()
-
-            socketio.emit('boards', boards, room=gid)
-            socketio.emit('wonboards', wonBoards, room=gid)
-            socketio.emit('lastPlayed', lastPlayed, room=gid)
-            
-            #gotta fix this too
-            if gameState.isGameWon():
-                socketio.emit('victory', gameState.checkWhoWon(), room=gid)
-                gameState.reset()
-
-            gameState.togglePlayer()
-            socketio.emit('turn', gameState.turn)
+    try:
+        newStateDict = gameMeta.handleClick(sid, object)
+        socketio.emit('state', newStateDict, room=gid)
 
 if __name__ == '__main__':
     socketio.run(app, port=1337, debug=True, host='0.0.0.0')

@@ -33,9 +33,9 @@ class GameState():
     def togglePlayer(self):
         self.turn = 'O' if self.turn == 'X' else 'X'
 
-    def stateSummary(self):
-        return (self.boards, 
-        self.wonBoards, 
+    def getStateDict(self):
+        return {"boards": self.boards, 
+        "wonBoards": self.wonBoards, 
         self.lastPlayed, 
         self.turn)
 

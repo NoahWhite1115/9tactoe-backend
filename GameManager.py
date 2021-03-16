@@ -1,5 +1,5 @@
 import uuid
-from GameState import GameState
+from GameMeta import GameMeta, NineXOGameMeta
 
 class GameManager():
     def __init__(self, timeout):
@@ -43,61 +43,6 @@ class GameManager():
         except(KeyError):
             return 
 
-class GameMeta():
-    def __init__(self):
-        self.gameState = self.makeGame()
-        self.players = {}
-        self.spectators = []
-
-    def makeGame(self):
-        return None
-
-    def getState(self):
-        return self.gameState
-
 class NineXOGameManager(GameManager):
     def createGameMeta(self):
         return NineXOGameMeta()
-
-class NineXOGameMeta(GameMeta):
-    def __init__(self):
-        super().__init__()
-        self.players = players = {'X': None, 'O': None}
-
-    def addPlayer(self, sid):
-        if (self.players['X'] == None):
-            print("It was player X!")
-            self.players['X'] = sid
-            return 'X'
-        elif (self.players['O'] == None):
-            print("It was player O!")
-            self.players['O'] = sid
-            return 'O'
-        else:
-            self.spectators.append(sid)
-            return 'Spec'
-
-    def removePlayer(self, sid):
-        if (self.players['X'] == sid):
-            self.players['X'] = None
-
-        elif (self.players['O'] == sid):
-            self.players['O'] = None
-
-        #TODO: error proof this 
-        else:
-            self.spectators.remove(sid)
-
-    def makeGame(self):
-        return GameState()
-
-    def checkPlayer(self, sid):
-        if (self.players[self.gameState.turn] != sid):
-            print("Wrong player clicked!")
-            return False
-
-        if self.players['X'] == None or self.players['O'] == None:
-            print("Not enough players connected!")
-            return False
-
-        return True
