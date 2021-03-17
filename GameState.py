@@ -38,7 +38,8 @@ class GameState():
         "boards": self.boards, 
         "wonBoards": self.wonBoards, 
         "lastPlayed": self.lastPlayed, 
-        "turn": self.turn
+        "turn": self.turn,
+        "victory": self.checkWhoWon()
         }
 
     def checkWhoWon(self):

@@ -2,6 +2,8 @@ from flask import Flask, render_template, request
 from flask_socketio import SocketIO, emit, join_room
 from flask_cors import CORS
 from NineXOGameManager import NineXOGameManager
+from GameManager import GameNotAvailibleException
+
 
 app = Flask(__name__)
 #change this in prod
@@ -24,19 +26,21 @@ def createGame(object):
 
 @socketio.on('join')
 def joinGame(object):
-    #need a try/catch here 
     gid = object['gid']
-    role = gameManager.addPlayer(gid, request.sid)
-    join_room(gid)
+
+    try:
+        role = gameManager.addPlayer(gid, request.sid)
+        join_room(gid)
+    except(GameNotAvailibleException):
+        socketio.emit('joinResponse', False)
+        return
 
     socketio.emit('joinResponse', True)
     socketio.emit('role', role, room=request.sid)
     socketio.emit('message',{"username":"System", "content": "You are " + role}, room=request.sid)
 
-    #This is a kludge; fix later
-    #in fact, a lot of this needs refactoring
-    if (role == 'O'):
-        socketio.emit('turn', 'X')
+    if gameManager.getGame(gid).gameReady():
+        socketio.emit('start_game', 'X', room=gid)
     
 @socketio.on('disconnect')
 def disconnect():
@@ -54,7 +58,7 @@ def message(object):
 def click(object):
     gid = object['gid']
 
-    gameMeta = gameManager.get_game(gid)
+    gameMeta = gameManager.getGame(gid)
 
     try:
         newStateDict = gameMeta.handleClick(request.sid, object)

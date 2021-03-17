@@ -30,7 +30,7 @@ class GameManager():
     takes: a game id as a string 
     returns: a new game state object
     """
-    def get_game(self, gid):
+    def getGame(self, gid):
         return self.game_hash[gid]
 
     """
@@ -46,14 +46,14 @@ class GameManager():
         gid: game id as a string
         sid: socket io socket id
     returns: role of the player
-    throws: 
+    throws: GameNotAvailibleException
     """
     def addPlayer(self, gid, sid):
         self.player_hash[sid] = gid
         try:
             game = self.game_hash[gid]
         except(KeyError):
-            raise()
+            raise GameNotAvailibleException(gid)
         return(game.addPlayer(sid))
 
 
@@ -64,9 +64,34 @@ class GameManager():
     """
     def removePlayer(self, sid):
         try: 
-            gid = self.player_hash[sid]
+            gid = findPlayer(sid)        
             game = self.game_hash[gid]
             game.removePlayer(sid)
             del self.player_hash[sid]
         except(KeyError):
+            #add logging here once it's ready
             return 
+
+    """
+    findPlayer: gets the gid of the game the player is in
+    takes: sid of the player to look up
+    returns: gid of the game the player is in
+    throws: PlayerNotFoundException 
+    """
+    def findPlayer(self, sid):
+        try: 
+            return self.player_hash[sid]
+        except(KeyError):
+            raise PlayerNotFoundException
+
+
+#Export these to their own file later
+class GameNotAvailibleException(KeyError):
+     def __init__(self, gid, message="Game with that gid does not exist"):
+        self.message = message
+        super().__init__(self.message)
+
+class PlayerNotFoundException(KeyError):
+    def __init__(self, sid, message="Player with that id is not in any games"):
+        self.message = message
+        super().__init__(self.message)

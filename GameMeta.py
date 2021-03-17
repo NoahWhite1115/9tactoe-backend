@@ -48,3 +48,11 @@ class GameMeta(ABC):
     def handleClick(self, sid, clickObject):
         return NotImplemented
 
+    """
+    gameReady: returns true when all players have joined
+    takes: 
+    returns: true if the game is ready to start, false otherwise
+    """
+    @abstractmethod
+    def gameReady(self):
+        return NotImplemented

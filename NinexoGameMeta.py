@@ -58,3 +58,9 @@ class NineXOGameMeta(GameMeta):
                 self.gameState.togglePlayer()
 
         return self.getStateDict()
+
+    def gameReady(self):
+        if (self.players['X'] != None and self.players['Y'] != None):
+            return True
+        else:
+            return False
