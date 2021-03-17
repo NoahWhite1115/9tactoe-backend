@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request
 from flask_socketio import SocketIO, emit, join_room
 from flask_cors import CORS
-from GameManager import NineXOGameManager, NineXOGameMeta
+from NineXOGameManager import NineXOGameManager
 
 app = Flask(__name__)
 #change this in prod
@@ -45,7 +45,9 @@ def disconnect():
 
 @socketio.on('post_submit')
 def message(object):
-    [gid, username, content] = object.values()
+    gid = object['gid']
+    username = object['username']
+    content = object['content']
     socketio.emit('message',{"username":username, "content":content}, room=gid)
 
 @socketio.on('click')
@@ -55,7 +57,7 @@ def click(object):
     gameMeta = gameManager.get_game(gid)
 
     try:
-        newStateDict = gameMeta.handleClick(sid, object)
+        newStateDict = gameMeta.handleClick(request.sid, object)
         socketio.emit('state', newStateDict, room=gid)
 
 if __name__ == '__main__':

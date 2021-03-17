@@ -34,13 +34,12 @@ class GameState():
         self.turn = 'O' if self.turn == 'X' else 'X'
 
     def getStateDict(self):
-        return {"boards": self.boards, 
+        return {
+        "boards": self.boards, 
         "wonBoards": self.wonBoards, 
-        self.lastPlayed, 
-        self.turn)
-
-    def isGameWon(self):
-        return self.boardWin(self.wonBoards) != ""
+        "lastPlayed": self.lastPlayed, 
+        "turn": self.turn
+        }
 
     def checkWhoWon(self):
         return self.boardWin(self.wonBoards)

@@ -20,18 +20,22 @@ class NineXOGameMeta(GameMeta):
             return 'O'
         else:
             self.spectators.append(sid)
-            return 'Spec'
+            return 'Spectator'
 
     def removePlayer(self, sid):
         if (self.players['X'] == sid):
             self.players['X'] = None
+            return True
 
-        elif (self.players['O'] == sid):
+        if (self.players['O'] == sid):
             self.players['O'] = None
+            return True
 
-        #TODO: error proof this 
-        else:
+        try:
             self.spectators.remove(sid)
+            return True
+        except(ValueError):
+            return False
 
     def checkPlayer(self, sid):
         if (self.players[self.gameState.turn] != sid):

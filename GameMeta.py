@@ -31,7 +31,7 @@ class GameMeta(ABC):
     """
     removePlayer: removes a player from the game
     takes: a player socket id
-    returns: 
+    returns: boolean indicating if the player was removed
     """
     @abstractmethod
     def removePlayer(self, sid):
