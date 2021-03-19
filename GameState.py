@@ -1,4 +1,4 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 
 class GameState(ABC):
     def __init__(self):
@@ -35,7 +35,7 @@ class GameState(ABC):
 
 class NineXOGameState(GameState):
     def __init__(self):
-        super.__init__()
+        super().__init__()
 
     def reset(self):
         self.boards = [['' for i in range(9)] for i in range(9)]

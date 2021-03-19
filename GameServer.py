@@ -63,6 +63,8 @@ def click(object):
     try:
         newStateDict = gameMeta.handleClick(request.sid, object)
         socketio.emit('state', newStateDict, room=gid)
+    except:
+        return
 
 if __name__ == '__main__':
     socketio.run(app, port=1337, debug=True, host='0.0.0.0')

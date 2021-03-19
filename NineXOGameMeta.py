@@ -7,7 +7,7 @@ class NineXOGameMeta(GameMeta):
         self.players = players = {'X': None, 'O': None}
 
     def makeGameState(self):
-        return GameState()
+        return NineXOGameState()
     
     def addPlayer(self, sid):
         if (self.players['X'] == None):
@@ -60,7 +60,7 @@ class NineXOGameMeta(GameMeta):
         return self.getStateDict()
 
     def gameReady(self):
-        if (self.players['X'] != None and self.players['Y'] != None):
+        if (self.players['X'] != None and self.players['O'] != None):
             return True
         else:
             return False

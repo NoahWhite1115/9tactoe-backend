@@ -64,7 +64,7 @@ class GameManager():
     """
     def removePlayer(self, sid):
         try: 
-            gid = findPlayer(sid)        
+            gid = self.findPlayer(sid)        
             game = self.game_hash[gid]
             game.removePlayer(sid)
             del self.player_hash[sid]
