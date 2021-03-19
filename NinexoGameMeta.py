@@ -1,4 +1,4 @@
-from GameState import GameState
+from GameState import NineXOGameState
 from GameMeta import GameMeta
 
 class NineXOGameMeta(GameMeta):
