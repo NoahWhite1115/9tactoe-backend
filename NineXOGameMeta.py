@@ -49,7 +49,7 @@ class NineXOGameMeta(GameMeta):
         return True
 
     def handleClick(self, sid, clickData):
-        if self.gameMeta.checkPlayer(sid):
+        if self.checkPlayer(sid):
             i = clickData['i']
             j = clickData['j']
             
