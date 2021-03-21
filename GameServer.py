@@ -40,7 +40,8 @@ def joinGame(object):
     socketio.emit('message',{"username":"System", "content": "You are " + role}, room=request.sid)
 
     if gameManager.getGame(gid).gameReady():
-        socketio.emit('start_game', 'X', room=gid)
+        newStateDict = gameManager.getGame(gid).getStateDict()
+        socketio.emit('start_game', newStateDict, room=gid)
     
 @socketio.on('disconnect')
 def disconnect():
