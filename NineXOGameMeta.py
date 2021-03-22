@@ -1,5 +1,5 @@
 from GameState import NineXOGameState
-from GameMeta import GameMeta
+from GameMeta import GameMeta, updateTime
 
 class NineXOGameMeta(GameMeta):
     def __init__(self):
@@ -48,6 +48,7 @@ class NineXOGameMeta(GameMeta):
 
         return True
 
+    @updateTime
     def handleClick(self, sid, clickData):
         if self.checkPlayer(sid):
             i = clickData['i']

@@ -3,7 +3,7 @@ from flask_socketio import SocketIO, emit, join_room
 from flask_cors import CORS
 from NineXOGameManager import NineXOGameManager
 from GameManager import GameNotAvailibleException
-
+import logging
 
 app = Flask(__name__)
 #change this in prod

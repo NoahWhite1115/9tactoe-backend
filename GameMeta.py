@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from datetime import utcnow
 
 class GameMeta(ABC):
     def __init__(self):
@@ -6,6 +7,7 @@ class GameMeta(ABC):
         self.players = {}
         self.spectators = []
         self.gameWon = False
+        self.timestamp = utcnow()
 
     def getStateDict(self):
         return self.gameState.getStateDict()
@@ -56,3 +58,8 @@ class GameMeta(ABC):
     @abstractmethod
     def gameReady(self):
         return NotImplemented
+
+def updateTime(function):
+    def updateTimeInternal(self):
+        self.timestamp = utcnow()
+        function(self)
