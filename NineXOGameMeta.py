@@ -1,5 +1,6 @@
 from GameState import NineXOGameState
-from GameMeta import GameMeta, updateTime
+from GameMeta import GameMeta
+from datetime import datetime  
 
 class NineXOGameMeta(GameMeta):
     def __init__(self):
@@ -48,8 +49,10 @@ class NineXOGameMeta(GameMeta):
 
         return True
 
-    @updateTime
     def handleClick(self, sid, clickData):
+        #maybe move to super?
+        self.timestamp = datetime.now()
+        
         if self.checkPlayer(sid):
             i = clickData['i']
             j = clickData['j']

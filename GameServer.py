@@ -32,7 +32,7 @@ def joinGame(object):
         role = gameManager.addPlayer(gid, request.sid)
         join_room(gid)
     except(GameNotAvailibleException):
-        socketio.emit('joinResponse', False)
+        socketio.emit('joinResponse', False, room=request.sid)
         return
 
     socketio.emit('joinResponse', True)
@@ -64,7 +64,8 @@ def click(object):
     try:
         newStateDict = gameMeta.handleClick(request.sid, object)
         socketio.emit('state', newStateDict, room=gid)
-    except:
+    except Exception as e:
+        print(e)
         return
 
 if __name__ == '__main__':
