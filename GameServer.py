@@ -48,6 +48,13 @@ def disconnect():
     gameManager.removePlayer(request.sid)
     print("Player disconnected!")
 
+@socketio.on('timeout_check')
+def checkTimeout():
+    for gid in gameManager.getTimeout():
+        socketio.emit('timeout', room=gid)
+        socketio.close_room(gid)
+        gameManager.cleanUpGame(gid)
+
 @socketio.on('post_submit')
 def message(object):
     gid = object['gid']

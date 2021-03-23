@@ -1,4 +1,5 @@
 import uuid
+from datetime import datetime
 from GameMeta import GameMeta
 
 class GameManager():
@@ -83,6 +84,32 @@ class GameManager():
             return self.player_hash[sid]
         except(KeyError):
             raise PlayerNotFoundException
+
+
+    """
+    getTimeout: returns games which are past their timeout threshold
+    takes: nothing
+    returns:
+    """
+    def getTimeout(self):
+        for game in self.game_hash:
+            if (game.timestamp - datetime.now()).total_seconds() > self.timeout:
+                yield game.gid
+
+    """
+    cleanUpGame: closes out the game passed
+    takes: gid of the game to close
+    returns: nothing
+    """
+    def cleanUpGame(self, gid):
+        game = self.game_hash[gid]
+        for player in game.player_hash.values():
+            self.removePlayer(player)
+        for spectator in game.spectators:
+            self.removePlayer(spectator)
+
+        del self.game_hash[gid]
+        
 
 
 #Export these to their own file later
