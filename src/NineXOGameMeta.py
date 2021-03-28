@@ -1,4 +1,4 @@
-from GameState import NineXOGameState
+from NineXOGameState import NineXOGameState
 from GameMeta import GameMeta
 from datetime import datetime  
 
