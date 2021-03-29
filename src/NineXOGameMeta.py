@@ -12,11 +12,9 @@ class NineXOGameMeta(GameMeta):
     
     def addPlayer(self, sid):
         if (self.players['X'] == None):
-            print("It was player X!")
             self.players['X'] = sid
             return 'X'
         elif (self.players['O'] == None):
-            print("It was player O!")
             self.players['O'] = sid
             return 'O'
         else:
@@ -50,7 +48,7 @@ class NineXOGameMeta(GameMeta):
         return True
 
     def handleClick(self, sid, clickData):
-        #maybe move to super?
+        #maybe move timestamp to super?
         self.timestamp = datetime.now()
         
         if self.checkPlayer(sid):
