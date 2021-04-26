@@ -35,7 +35,7 @@ def joinGame(object):
         socketio.emit('joinResponse', False, room=request.sid)
         return
 
-    socketio.emit('joinResponse', True)
+    socketio.emit('joinResponse', True, room=request.sid)
     socketio.emit('role', role, room=request.sid)
     socketio.emit('message',{"username":"System", "content": "You are " + role}, room=request.sid)
 
