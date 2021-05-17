@@ -85,14 +85,17 @@ class GameManager():
         except(KeyError):
             raise PlayerNotFoundException
 
-
     """
     getTimeout: returns games which are past their timeout threshold
     takes: nothing
-    returns:
+    returns: gids 
     """
     def getTimeout(self):
+        print("self")
+        print(self)
+        print(self.game_hash)
         for game in self.game_hash:
+            print("time:" + str(game.timestamp - datetime.now()))
             if (game.timestamp - datetime.now()).total_seconds() > self.timeout:
                 yield game.gid
 

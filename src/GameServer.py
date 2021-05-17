@@ -3,6 +3,7 @@ from flask_socketio import SocketIO, emit, join_room
 from flask_cors import CORS
 from NineXOGameManager import NineXOGameManager
 from GameManager import GameNotAvailibleException
+from apscheduler.schedulers.background import BackgroundScheduler
 import logging
 
 app = Flask(__name__)
@@ -11,7 +12,7 @@ app.config['SECRET_KEY'] = 'secret!'
 socketio = SocketIO(app, cors_allowed_origins="*")
 CORS(app)
 
-gameManager = NineXOGameManager(300)
+gameManager = NineXOGameManager(60)
 
 @socketio.on('connect')
 def connect():
@@ -48,13 +49,6 @@ def disconnect():
     gameManager.removePlayer(request.sid)
     print("Player disconnected!")
 
-@socketio.on('timeout_check')
-def checkTimeout():
-    for gid in gameManager.getTimeout():
-        socketio.emit('timeout', room=gid)
-        socketio.close_room(gid)
-        gameManager.cleanUpGame(gid)
-
 @socketio.on('post_submit')
 def message(object):
     gid = object['gid']
@@ -74,6 +68,18 @@ def click(object):
     except Exception as e:
         print(e)
         return
+
+def checkTimeout(manager):
+    print("global")
+    print(manager)
+    for gid in manager.getTimeout():
+        socketio.emit('timeout', room=gid)
+        socketio.close_room(gid)
+        manager.cleanUpGame(gid)
+
+sched = BackgroundScheduler(daemon=True)
+sched.add_job(lambda: checkTimeout(gameManager),'interval',minutes=1)
+sched.start()
 
 if __name__ == '__main__':
     socketio.run(app, port=1337, debug=True, host='0.0.0.0')
